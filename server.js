@@ -1,21 +1,18 @@
-const app = require('./app');
-const PORT = process.env.PORT || 8000;
-const mongoose = require('mongoose');
+import { ApolloServer } from '@apollo/server';
+import { expressMiddleware as apolloMiddleware } from '@apollo/server/express4';
+import { resolvers } from './graphql/resolves.js';
+import { readFile } from 'node:fs/promises';
 
-mongoose
-  .connect(process.env.MONGO_URL)
-  .then(() => console.log('MongoDb Connected'));
+import app from './app.js';
 
-process.on('unhandledRejection', (err) => {
-  console.log(err.name, err.message);
-});
+const Port = process.env.PORT || 8000;
 
-process.on('uncaughtException', (err) => {
-  console.log('UNCAUGHT EXCEPTION 💥 Shutting down...');
-  console.log(err.name, err.message);
-  server.close(() => process.exit(1));
-});
+const typeDefs = await readFile('./graphql/typeDefs.graphql', 'utf-8');
+const apolloServer = new ApolloServer({ typeDefs, resolvers });
+await apolloServer.start();
+app.use('/graphql', apolloMiddleware(apolloServer));
 
-const server = app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+app.listen('8000', () => {
+  console.log(`server is running on port ${Port}`);
+  console.log(`graphql endpoint http://localhost:8000/graphql`);
 });
