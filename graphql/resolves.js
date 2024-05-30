@@ -22,6 +22,13 @@ const resolvers = {
       console.log(job);
       return ` job.title:auth-alireza`;
     },
+    company: () => {
+      return {
+        id: `${Math.floor(Math.random() * 21)}`,
+        name: 'udemy',
+        description: 'learning programming',
+      };
+    },
   },
 };
 
