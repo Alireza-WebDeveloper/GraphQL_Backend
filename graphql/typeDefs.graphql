@@ -1,3 +1,13 @@
 type Query {
-  greeting: String
+  job: [Job!]
+}
+
+type Job {
+  id: String
+  """
+  this is a document of __date__(ex:2020-02-04)
+  """
+  date: String
+  title: String
+  description: String
 }
