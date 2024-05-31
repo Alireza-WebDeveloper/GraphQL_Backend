@@ -24,6 +24,14 @@ const resolvers = {
       if (find) return find;
       return null;
     },
+    companyById: (_root, args) => {
+      const { id } = args;
+      return {
+        id,
+        name: 'udemy',
+        description: 'learning programming',
+      };
+    },
   },
   Job: {
     company: () => {
