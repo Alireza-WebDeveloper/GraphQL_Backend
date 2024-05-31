@@ -1,5 +1,6 @@
 type Query {
   job: [Job!]
+  jobById(id: String): Job
 }
 
 type Company {
