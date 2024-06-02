@@ -13,7 +13,21 @@ const data = [
   },
 ];
 
+const products = [
+  {
+    id: '1',
+    name: 'shirt',
+    price: '350',
+  },
+  {
+    id: '2',
+    name: 'jacket',
+    price: '210',
+  },
+];
+
 const resolvers = {
+  // Query Functions
   Query: {
     job: async () => {
       return data;
@@ -32,7 +46,19 @@ const resolvers = {
         description: 'learning programming',
       };
     },
+    product: async (_root, args) => {
+      return products;
+    },
+    productById: async (_root, args) => {
+      const { id } = args;
+      console.log(args);
+      const find = products.find((item) => item.id === id);
+      if (find) return find;
+      return null;
+    },
   },
+
+  // Types State
   Job: {
     company: () => {
       return {
