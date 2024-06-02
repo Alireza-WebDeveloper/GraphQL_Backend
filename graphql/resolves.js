@@ -89,6 +89,16 @@ const resolvers = {
       };
     },
   },
+  Mutation: {
+    createJob: async (_root, { title, description }) => {
+      console.log(title, description);
+      return {
+        id: uuidv4(),
+        title,
+        description,
+      };
+    },
+  },
 };
 
 export { resolvers };

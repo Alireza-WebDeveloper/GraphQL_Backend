@@ -28,3 +28,13 @@ type Job {
   company: Company
   description: String
 }
+
+type JobMutate {
+  id: String
+  title: String
+  description: String
+}
+
+type Mutation {
+  createJob(title: String, description: String): JobMutate
+}
