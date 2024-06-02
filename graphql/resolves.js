@@ -1,5 +1,23 @@
 import { v4 as uuidv4 } from 'uuid';
 
+function ErrorMessage(message) {
+  return new GraphQLError(
+    'the error message',
+    {
+      // curly bracket here to open the object
+      extensions: {
+        code: 'SOMETHING_BAD_HAPPENED',
+        http: {
+          status: 404,
+          headers: new Map([
+            ['some-header', 'it was bad'],
+            ['another-header', 'seriously'],
+          ]),
+        },
+      },
+    } // curly bracket here to close the object
+  );
+}
 const data = [
   {
     id: '1',
@@ -32,11 +50,14 @@ const resolvers = {
     job: async () => {
       return data;
     },
-    jobById: (_root, args) => {
+    jobById: async (_root, args) => {
       const { id } = args;
-      const find = data.find((item) => item.id === id);
-      if (find) return find;
-      return null;
+      const job = data.find((item) => item.id === id);
+      if (job) return job;
+      if (!job) {
+        ErrorMessage(`no job found with id ${id}`);
+        return null;
+      }
     },
     companyById: (_root, args) => {
       const { id } = args;
