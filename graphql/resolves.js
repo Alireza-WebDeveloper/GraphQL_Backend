@@ -69,8 +69,8 @@ const BlogModel = mongoose.model('Blog', BlogSchema);
 
 // !! Resolvers
 const resolvers = {
-  //  Query
   Query: {
+    // Blog
     getBlog: async () => {
       const data = await BlogModel.find();
       if (!data) {
@@ -78,6 +78,7 @@ const resolvers = {
       }
       return data;
     },
+    // Job
     job: async () => data,
     jobById: async (_root, args) => {
       const { id } = args;
@@ -85,6 +86,7 @@ const resolvers = {
       if (job) return job;
       return ErrorMessage(`No job found with id ${id}`);
     },
+    // Company
     companyById: (_root, args) => {
       const { id } = args;
       return {
@@ -93,6 +95,7 @@ const resolvers = {
         description: 'learning programming',
       };
     },
+    // Product
     product: async () => products,
     productById: async (_root, args) => {
       const { id } = args;
@@ -111,11 +114,13 @@ const resolvers = {
   },
 
   Mutation: {
+    // Job
     createJob: async (_root, { title, description }) => ({
       id: uuidv4(),
       title,
       description,
     }),
+    // Blog
     createBlog: async (_root, { data }) => {
       const { title, content, author } = data;
       console.log(data);
@@ -124,6 +129,16 @@ const resolvers = {
       }
       const blog = await BlogModel.create({ title, content, author });
       return blog;
+    },
+    deleteBlog: async (_root, args) => {
+      const { id } = args;
+      const blog = await BlogModel.deleteOne({ _id: id });
+      if (blog.deletedCount === 0) {
+        return ErrorMessage('The blog post was not found.');
+      }
+      return {
+        status: 200,
+      };
     },
   },
 };

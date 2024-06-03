@@ -10,6 +10,7 @@ type Query {
 type Mutation {
   createJob(title: String, description: String): JobMutate
   createBlog(data: BlogInput): Blog
+  deleteBlog(id: String): Blog
 }
 
 type Company {
