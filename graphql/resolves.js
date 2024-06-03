@@ -1,33 +1,33 @@
 import { v4 as uuidv4 } from 'uuid';
+import mongoose from 'mongoose';
 
+// !! Error Message Function
 function ErrorMessage(message) {
-  return new GraphQLError(
-    'the error message',
-    {
-      // curly bracket here to open the object
-      extensions: {
-        code: 'SOMETHING_BAD_HAPPENED',
-        http: {
-          status: 404,
-          headers: new Map([
-            ['some-header', 'it was bad'],
-            ['another-header', 'seriously'],
-          ]),
-        },
+  return new GraphQLError('the error message', {
+    extensions: {
+      code: 'SOMETHING_BAD_HAPPENED',
+      http: {
+        status: 404,
+        headers: new Map([
+          ['some-header', 'it was bad'],
+          ['another-header', 'seriously'],
+        ]),
       },
-    } // curly bracket here to close the object
-  );
+    },
+  });
 }
+
+// !! Sample Data
 const data = [
   {
     id: '1',
     title: 'programming',
-    description: 'learn javascript frameworks on 2024.',
+    description: 'learn javascript frameworks in 2024.',
   },
   {
     id: '2',
     title: 'student',
-    description: 'alireza are students course react.js',
+    description: 'alireza is a student in a React.js course',
   },
 ];
 
@@ -44,20 +44,46 @@ const products = [
   },
 ];
 
+// !! Blog Post Schema and Model
+const { Schema } = mongoose;
+const BlogSchema = new Schema(
+  {
+    title: { type: String, required: true },
+    author: { type: String, required: true },
+    content: { type: String, required: true },
+  },
+  {
+    collection: 'Blog',
+    versionKey: false,
+    toJSON: {
+      virtuals: true,
+      transform: (doc, ret) => {
+        delete ret.id;
+      },
+    },
+    toObject: { virtuals: true },
+  }
+);
+
+const BlogModel = mongoose.model('Blog', BlogSchema);
+
+// !! Resolvers
 const resolvers = {
-  // Query Functions
+  //  Query
   Query: {
-    job: async () => {
+    getBlog: async () => {
+      const data = await BlogModel.find();
+      if (!data) {
+        return ErrorMessage('Not Found Blogs');
+      }
       return data;
     },
+    job: async () => data,
     jobById: async (_root, args) => {
       const { id } = args;
       const job = data.find((item) => item.id === id);
       if (job) return job;
-      if (!job) {
-        ErrorMessage(`no job found with id ${id}`);
-        return null;
-      }
+      return ErrorMessage(`No job found with id ${id}`);
     },
     companyById: (_root, args) => {
       const { id } = args;
@@ -67,36 +93,29 @@ const resolvers = {
         description: 'learning programming',
       };
     },
-    product: async (_root, args) => {
-      return products;
-    },
+    product: async () => products,
     productById: async (_root, args) => {
       const { id } = args;
-      console.log(args);
-      const find = products.find((item) => item.id === id);
-      if (find) return find;
+      const product = products.find((item) => item.id === id);
+      if (product) return product;
       return null;
     },
   },
-
-  // Types State
+  //  Job
   Job: {
-    company: () => {
-      return {
-        id: `${Math.floor(Math.random() * 21)}`,
-        name: 'udemy',
-        description: 'learning programming',
-      };
-    },
+    company: () => ({
+      id: `${Math.floor(Math.random() * 21)}`,
+      name: 'udemy',
+      description: 'learning programming',
+    }),
   },
+
   Mutation: {
-    createJob: async (_root, { title, description }) => {
-      return {
-        id: uuidv4(),
-        title,
-        description,
-      };
-    },
+    createJob: async (_root, { title, description }) => ({
+      id: uuidv4(),
+      title,
+      description,
+    }),
   },
 };
 

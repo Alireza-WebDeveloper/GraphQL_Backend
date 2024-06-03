@@ -4,6 +4,7 @@ type Query {
   jobById(id: String): Job
   product: [Product]
   productById(id: String): Product
+  getBlog: [Blog]
 }
 
 type Company {
@@ -37,4 +38,11 @@ type JobMutate {
 
 type Mutation {
   createJob(title: String, description: String): JobMutate
+}
+
+type Blog {
+  _id: String
+  title: String
+  author: String
+  content: String
 }
