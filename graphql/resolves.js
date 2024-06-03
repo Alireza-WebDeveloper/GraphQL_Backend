@@ -116,6 +116,15 @@ const resolvers = {
       title,
       description,
     }),
+    createBlog: async (_root, { data }) => {
+      const { title, content, author } = data;
+      console.log(data);
+      if (!title || !content || !author) {
+        return ErrorMessage('Please Enter title,content,author');
+      }
+      const blog = await BlogModel.create({ title, content, author });
+      return blog;
+    },
   },
 };
 

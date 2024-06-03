@@ -7,6 +7,11 @@ type Query {
   getBlog: [Blog]
 }
 
+type Mutation {
+  createJob(title: String, description: String): JobMutate
+  createBlog(data: BlogInput): Blog
+}
+
 type Company {
   id: String
   name: String
@@ -36,8 +41,10 @@ type JobMutate {
   description: String
 }
 
-type Mutation {
-  createJob(title: String, description: String): JobMutate
+input BlogInput {
+  title: String
+  author: String
+  content: String
 }
 
 type Blog {
