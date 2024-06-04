@@ -1,3 +1,4 @@
+# Query , Mutation
 type Query {
   job: [Job!]
   companyById(id: String): Company
@@ -12,6 +13,8 @@ type Mutation {
   createBlog(data: BlogInput): Blog
   deleteBlog(id: String): Blog
 }
+
+# Type States
 
 type Company {
   id: String

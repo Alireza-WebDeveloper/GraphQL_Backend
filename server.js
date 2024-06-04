@@ -22,7 +22,18 @@ process.on('uncaughtException', (err) => {
 const typeDefs = await readFile('./graphql/typeDefs.graphql', 'utf-8');
 const apolloServer = new ApolloServer({ typeDefs, resolvers });
 await apolloServer.start();
-app.use('/graphql', apolloMiddleware(apolloServer));
+app.use(
+  '/graphql',
+  apolloMiddleware(apolloServer, {
+    context: ({ req, res }) => {
+      if (req.auth) {
+        // const user  = await ...
+        return { user };
+      }
+      return { user: false };
+    },
+  })
+);
 
 app.listen('8000', () => {
   console.log(`server is running on port ${Port}`);

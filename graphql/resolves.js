@@ -87,7 +87,12 @@ const resolvers = {
       return ErrorMessage(`No job found with id ${id}`);
     },
     // Company
-    companyById: (_root, args) => {
+    companyById: (_root, args, context) => {
+      const { user } = context;
+
+      if (user) {
+        throw 'Error: Authentication required. Please log in to view blogs.';
+      }
       const { id } = args;
       return {
         id,
