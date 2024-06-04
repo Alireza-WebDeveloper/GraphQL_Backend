@@ -18,6 +18,7 @@ process.on('uncaughtException', (err) => {
   console.log(err.name, err.message);
   server.close(() => process.exit(1));
 });
+
 // Connection Apollo Server
 const typeDefs = await readFile('./graphql/typeDefs.graphql', 'utf-8');
 const apolloServer = new ApolloServer({ typeDefs, resolvers });
