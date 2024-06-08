@@ -12,6 +12,7 @@ type Mutation {
   createJob(title: String, description: String): JobMutate
   createBlog(data: BlogInput): Blog
   deleteBlog(id: String): Blog
+  getAccount(username: String, password: String): Account
 }
 
 # Type States
@@ -43,6 +44,11 @@ type JobMutate {
   id: String
   title: String
   description: String
+}
+
+type Account {
+  username: String
+  password: String
 }
 
 input BlogInput {

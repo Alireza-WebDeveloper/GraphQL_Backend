@@ -70,6 +70,8 @@ const BlogModel = mongoose.model('Blog', BlogSchema);
 // !! Resolvers
 const resolvers = {
   Query: {
+    // Account
+
     // Blog
     getBlog: async () => {
       const data = await BlogModel.find();
@@ -119,6 +121,11 @@ const resolvers = {
   },
 
   Mutation: {
+    // Account
+    getAccount: async (_root, { username, password }, context) => {
+      console.log(username, password);
+      return args;
+    },
     // Job
     createJob: async (_root, { title, description }) => ({
       id: uuidv4(),
