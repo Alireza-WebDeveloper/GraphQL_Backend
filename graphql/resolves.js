@@ -129,7 +129,14 @@ const resolvers = {
     getCourse: async (_root, { page = 1, limit = 10 }, context) => {
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
-      return courses.slice(startIndex, endIndex);
+      return {
+        status: 200,
+        message: 'success',
+        count: courses.length,
+        data: {
+          course: courses.slice(startIndex, endIndex),
+        },
+      };
     },
     // Blog
     getBlog: async () => {
