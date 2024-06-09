@@ -44,6 +44,61 @@ const products = [
   },
 ];
 
+//  Course Data
+const courses = [
+  {
+    name: 'React',
+    description: 'A JavaScript library for building user interfaces',
+  },
+  { name: 'Vue', description: 'The Progressive JavaScript Framework' },
+  { name: 'Angular', description: 'One framework. Mobile & desktop.' },
+  { name: 'Svelte', description: 'Cybernetically enhanced web apps' },
+  { name: 'Ember', description: 'A framework for ambitious web developers' },
+  {
+    name: 'Backbone',
+    description:
+      'Give your JS App some Backbone with Models, Views, Collections, and Events',
+  },
+  { name: 'jQuery', description: 'Write less, do more.' },
+  { name: 'Next.js', description: 'The React Framework for Production' },
+  { name: 'Nuxt.js', description: 'The Intuitive Vue Framework' },
+  { name: 'Gatsby', description: 'Fast in every way that matters' },
+  { name: 'Meteor', description: 'The fastest way to build JavaScript apps' },
+  { name: 'Aurelia', description: 'The next generation UI framework' },
+  { name: 'Polymer', description: 'Build modern apps using web components' },
+  {
+    name: 'Alpine.js',
+    description: 'Think of it like Tailwind for JavaScript',
+  },
+  {
+    name: 'Stimulus',
+    description: 'A modest JavaScript framework for the HTML you already have',
+  },
+  {
+    name: 'Preact',
+    description: 'Fast 3kB alternative to React with the same modern API',
+  },
+  {
+    name: 'Inferno',
+    description:
+      'An extremely fast, React-like JavaScript library for building modern user interfaces',
+  },
+  {
+    name: 'LitElement',
+    description:
+      'A simple base class for creating fast, lightweight web components',
+  },
+  {
+    name: 'Hyperapp',
+    description: 'The tiny framework for building hypertext applications',
+  },
+  {
+    name: 'Marko',
+    description:
+      'A friendly (and fast!) UI library that makes building web apps fun',
+  },
+];
+
 // !! Blog Post Schema and Model
 const { Schema } = mongoose;
 const BlogSchema = new Schema(
@@ -70,8 +125,12 @@ const BlogModel = mongoose.model('Blog', BlogSchema);
 // !! Resolvers
 const resolvers = {
   Query: {
-    // Account
-
+    // Course
+    getCourse: async (_root, { page = 1, limit = 10 }, context) => {
+      const startIndex = (page - 1) * limit;
+      const endIndex = startIndex + limit;
+      return courses.slice(startIndex, endIndex);
+    },
     // Blog
     getBlog: async () => {
       const data = await BlogModel.find();

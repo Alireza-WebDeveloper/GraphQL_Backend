@@ -6,6 +6,7 @@ type Query {
   product: [Product]
   productById(id: String): Product
   getBlog: [Blog]
+  getCourse(page: String, limit: String): [Course]
 }
 
 type Mutation {
@@ -16,6 +17,11 @@ type Mutation {
 }
 
 # Type States
+
+type Course {
+  name: String
+  description: String
+}
 
 type Company {
   id: String
